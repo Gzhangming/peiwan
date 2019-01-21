@@ -1,5 +1,7 @@
-
 spring:
+  #消息mq的地址 如果上传还需要修改  （张家明）
+  activemq:
+    broker-url: tcp://127.0.0.1:61616
   datasource:
     ##数据库连接信息
     name: mysql_test
@@ -39,4 +41,7 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+#(发短信秘钥)
+accessKeyId: LTAIWtbx9AzI12pX
+accessKeySecrt: HyEV759TWReTVO5J0dbfivUGVCR6iH
 

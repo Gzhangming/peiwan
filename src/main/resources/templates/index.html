@@ -1,5 +1,5 @@
 ﻿<!DOCtype html>
-<html lang="zh">
+<html lang="zh" xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -110,7 +110,7 @@
                 <img src="/images/ico_31_hover.png" style="display: none;">
                 <div style="height: 0px;width: 100%;"></div>
                 <!--beforeLanding(登陆之前) -->
-                <div class="login style1" id="beforeLanding">
+                <div class="login style1" id="beforeLanding" style="display: none;">
                     <ul class="nav navbar-nav navbar-right">
 
                         <li>
@@ -121,7 +121,7 @@
                     </ul>
                 </div>
                 <!--afterTheLanding(登陆过后)-->
-                <div class="login style1" id="afterTheLanding">
+                <div class="login style1" id="afterTheLanding" style="display: none;">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a id="personnames" href="/indexw"  th:text="${session.nameTPerson?.personNickname}"></a>&nbsp;&nbsp;<a data-toggle="modal" data-target="#login" href="/logout"><span class="glyphicon glyphicon-log-in"></span>退出登陆</a></li>
                     </ul>
@@ -129,24 +129,13 @@
 
                 <script th:inline="javascript">
 
-                    <!--登陆隐藏-->
-                    function LandingHide() {
-                        $("#afterTheLanding").hide();
-                    }
 
-
-                    <!--登陆过后隐藏显示-->
-                    function LandingHides() {
-                        $("#beforeLanding").hide();
-                    }
                     var nameTPerson = [[${session.nameTPerson?.personNickname}]];
-                    /*alert(nameTPerson);*/
-                    if (nameTPerson==null||nameTPerson==0) {
-                        LandingHide();
-                    } else{
-                        LandingHides();
+                    if (nameTPerson==null){
+                        document.getElementById("beforeLanding").style.display="";
+                    } else if (nameTPerson!=null){
+                        document.getElementById("afterTheLanding").style.display="";
                     }
-
 
 
 

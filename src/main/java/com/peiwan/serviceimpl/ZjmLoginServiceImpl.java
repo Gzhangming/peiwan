@@ -37,12 +37,12 @@ public class ZjmLoginServiceImpl extends ServiceImpl<ZjmLoginMapper, TPerson> im
     //    测试
     @Override
     public TPerson nameTPerson(TPerson tPerson) {
-        String personNickname = tPerson.getPersonNickname();
+        String personName = tPerson.getPersonName();
         String personPwd = tPerson.getPersonPwd();
         // 生成uuid
         String id = UUIDUtil.getOneUUID();
         // 将用户名作为盐值
-        ByteSource salt = ByteSource.Util.bytes(personNickname);
+        ByteSource salt = ByteSource.Util.bytes(personName);
         /*
          * MD5加密：
          * 使用SimpleHash类对原始密码进行加密。
@@ -53,7 +53,7 @@ public class ZjmLoginServiceImpl extends ServiceImpl<ZjmLoginMapper, TPerson> im
          * 最后用toHex()方法将加密后的密码转成String
          * */
         String newPs = new SimpleHash("MD5",personPwd, salt, 1024).toHex();
-        tPerson.setPersonNickname(personNickname);
+        tPerson.setPersonName(personName);
         tPerson.setPersonPwd(newPs);
         TPerson TPersonList= zjmLoginMapper.nameTPerson(tPerson);
         return TPersonList;
@@ -66,30 +66,21 @@ public class ZjmLoginServiceImpl extends ServiceImpl<ZjmLoginMapper, TPerson> im
     }
 
     @Override
-    public TPerson myTPersonname(String personNickname) {
-        return zjmLoginMapper.myTPersonname(personNickname);
+    public TPerson myTPersonname(String personName) {
+        return zjmLoginMapper.myTPersonname(personName);
     }
     //给据用户名返回是否存在 0 不出存在 用户名不存在，请先去注册！  大于0 用户名存在  不用提示
     @Override
-    public String iTPersonname(String personNickname) {
-        String msg;
-        Integer iTPersonname = zjmLoginMapper.iTPersonname(personNickname);
-        if(iTPersonname==0){
-            msg="用户名不存在，请先去注册！";
-            return msg;
-        }else {
-            msg="可登陆";
-            return msg;
-        }
+    public Integer iTPersonname(String personName) {
+        return zjmLoginMapper.iTPersonname(personName);
     }
     //  根据用户名和密码 判断密码是否正确  0 不正确  大于0正确
     @Override
-    public String iTPersonpwd(String personNickname, String personPwd) {
-        String msg="";
+    public Integer iTPersonpwd(String personName, String personPwd) {
         // 生成uuid
         String id = UUIDUtil.getOneUUID();
         // 将用户名作为盐值
-        ByteSource salt = ByteSource.Util.bytes(personNickname);
+        ByteSource salt = ByteSource.Util.bytes(personName);
         /*
          * MD5加密：
          * 使用SimpleHash类对原始密码进行加密。
@@ -100,21 +91,13 @@ public class ZjmLoginServiceImpl extends ServiceImpl<ZjmLoginMapper, TPerson> im
          * 最后用toHex()方法将加密后的密码转成String
          * */
         String newPs = new SimpleHash("MD5",personPwd, salt, 1024).toHex();
-        Integer iTPersonpwd = zjmLoginMapper.iTPersonpwd(personNickname, newPs);
-        if (iTPersonpwd==0){
-            msg = "密码不正确,请输入正确密码";
-            return msg;
-        }
-        if (iTPersonpwd>0){
-            msg = "密码输入正确,可登陆";
-            return msg;
-        }
-        return msg;
+        return  zjmLoginMapper.iTPersonpwd(personName, newPs);
     }
 
+    //根据用户名 判断用户是否可用
     @Override
-    public Integer checkRegisterName(String personNickname) {
-        return zjmLoginMapper.iTPersonname(personNickname);
+    public Integer checkRegisterName(String personName) {
+        return zjmLoginMapper.iTPersonname(personName);
     }
 
     /**
@@ -128,7 +111,7 @@ public class ZjmLoginServiceImpl extends ServiceImpl<ZjmLoginMapper, TPerson> im
         if (tPerson!=null){
             //获取前台传过来的值
             //昵称
-            String personNickname = tPerson.getPersonNickname();
+            String personName = tPerson.getPersonName();
             //密码
             String personPwd = tPerson.getPersonPwd();
             String personTel = tPerson.getPersonTel();
@@ -140,7 +123,7 @@ public class ZjmLoginServiceImpl extends ServiceImpl<ZjmLoginMapper, TPerson> im
             // 生成uuid
             String id = UUIDUtil.getOneUUID();
             // 将用户名作为盐值
-            ByteSource salt = ByteSource.Util.bytes(personNickname);
+            ByteSource salt = ByteSource.Util.bytes(personName);
             /*
              * MD5加密：
              * 使用SimpleHash类对原始密码进行加密。
@@ -153,7 +136,7 @@ public class ZjmLoginServiceImpl extends ServiceImpl<ZjmLoginMapper, TPerson> im
             String newPs = new SimpleHash("MD5",personPwd, salt, 1024).toHex();
             //把需要的东西都放在对象中
             TPerson person = new TPerson();
-            person.setPersonNickname(personNickname);
+            person.setPersonName(personName);
             person.setPersonPwd(newPs);
             person.setPersonPwdencry(newPs);
             person.setPersonCreatetime(PersonCreatetime);
@@ -180,13 +163,10 @@ public class ZjmLoginServiceImpl extends ServiceImpl<ZjmLoginMapper, TPerson> im
 
     @Override
     public void createSmsCode(String personTel) {
-
         //1生产一个6位随机数
         String smscode=(long)(Math.random()*1000000)+"";
-        System.out.println(smscode);
         //2将验证码放入redis
         redisTemplate.boundHashOps("smscodl").put("personTel",smscode);
-
         //3将短信内容发送给activeMQ
         Map map = new HashMap();
         Map map2 = new HashMap();
@@ -197,7 +177,6 @@ public class ZjmLoginServiceImpl extends ServiceImpl<ZjmLoginMapper, TPerson> im
         map2.put("code",smscode);
         map.put("param", JSON.toJSONString(map2));
         jmsMessagingTemplate.convertAndSend("sms",map);
-
     }
 
     /**

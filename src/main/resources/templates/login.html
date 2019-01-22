@@ -21,9 +21,8 @@
 				</div>
 
 				<form name="form" action="/logins" method="post" onSubmit="return beforeSubmit(this);">
-
 					<div class="form_text_ipt">
-						<input id="personNickname" name="personNickname" type="text" placeholder="用户名" onblur="pname()">
+						<input id="personName" name="personName" type="text" placeholder="用户名" onblur="pname()">
 					</div>
 					<div class="form_text_ipt">
 						<input id="personPwd" name="personPwd" type="password" placeholder="密码" onblur="ppwd()">
@@ -61,39 +60,52 @@
 <script type="text/javascript" src="/loginJC/js/jquery.min.js"></script>
 <script type="text/javascript" src="/plugins/layer/layer.js"></script>
 <script>
-    var personNickname = document.getElementById("personNickname");
+    var personName = document.getElementById("personName");
     var personPwd = document.getElementById("personPwd");
-
+    //用户名状态
+    var itpersonname = "";
+    //密码状态
+	var iTPersonpwd = "";
     //用户名和密码为空 不能提交点单
     function beforeSubmit(form) {
-        if (personNickname.value == "") {
+        if (personName.value == "") {
             //layer.msg('用户名不能为空！');
-            form.personNickname.focus();//然后输入焦点或者光标定位到这个为空的文本框里。
+            form.personName.focus();//然后输入焦点或者光标定位到这个为空的文本框里。
             return false;
-        }
+        }else if (itpersonname==0){
+            layer.tips("用户名错误！", '#personName');
+            form.personName.focus();
+            return false;
+		}
         if (personPwd.value == "") {
             //layer.msg('密码不能为空！');
             form.personPwd.focus();//然后输入焦点或者光标定位到这个为空的文本框里。
             return false;
-        }
+        }else if (iTPersonpwd==0) {
+            layer.tips("用户名密码错误！", '#personPwd');
+            form.personPwd.focus();
+            return false;
+		}
+
     }
 
     //用ajax异步验证用户名
     function pname() {
-        if (personNickname.value == "") {
-            layer.tips("用户名不能为空！", '#personNickname');
+        if (personName.value == "") {
+            layer.tips("用户名不能为空！", '#personName');
         } else {
             $.ajax({
                 url: '/Yname',//跳到业务层
                 type: 'get',
                 dataType: 'json',
                 data: {
-                    personNickname: personNickname.value
+                    personName: personName.value
                 },
                 success: function (msg) {
-                    //layer.tips(msg.iTPersonname,'#personNickname');
+                    itpersonname=msg.iTPersonname;
                 },
                 error: function () {
+
                 }
             });
         }
@@ -109,11 +121,11 @@
                 type: "get",
                 dataType: "json",
                 data: {
-                    personNickname: personNickname.value,
+                    personName: personName.value,
                     personPwd: personPwd.value
                 },
                 success: function (msg) {
-                    layer.tips(msg.iTPersonpwd, '#personPwd');
+                    iTPersonpwd= msg.iTPersonpwd;
                 },
                 error: function () {
                 }
@@ -121,23 +133,6 @@
         }
     }
 
-
-    // //登陆事件
-    // function button() {
-    // 	$.ajax({
-    // 		type: "POST",//方法类型
-    // 		dataType: "json",//预期服务器返回的数据类型
-    // 		url: "/MyIndex",
-    // 		data: $('#form1').serialize(),
-    // 		success: function (result) {
-    // 		    //测试用
-    // 			layer.msg(result);
-    //         },
-    //         error: function () {
-    // 			layer.msg("异常！");
-    //         }
-    // 	});
-    // }
 
 </script>
 <div style="text-align:center;">

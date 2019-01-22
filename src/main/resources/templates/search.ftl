@@ -19,7 +19,7 @@
         </div>
         <div class="form-group">
             <label for="userage">用户昵称：</label>
-            <input type="text" class="form-control" id="userage" name="userage" value="${data.personNickname}" placeholder="此数据不允许修改">
+            <input type="text" class="form-control" id="userage" name="userage" value="${data.personName}" placeholder="此数据不允许修改">
         </div>
         <div class="form-group">
             <label for="username">用户名：</label>

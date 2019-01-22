@@ -99,7 +99,7 @@
 
             <div class="seach_Box">
                 <img src="/images/ico_28_hover.png" style="display: none;">
-                <input id="personNickname" placeholder="陪玩昵称、ID、靓号" type="text" >
+                <input id="personName" placeholder="陪玩昵称、ID、靓号" type="text" >
                 <p @click="inputShow" id="searchinfo" class="seach_p"></p>
             </div>
 
@@ -123,14 +123,14 @@
                 <!--afterTheLanding(登陆过后)-->
                 <div class="login style1" id="afterTheLanding" style="display: none;">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a id="personnames" href="/indexw"  th:text="${session.nameTPerson?.personNickname}"></a>&nbsp;&nbsp;<a data-toggle="modal" data-target="#login" href="/logout"><span class="glyphicon glyphicon-log-in"></span>退出登陆</a></li>
+                        <li><a id="personnames" href="/indexw"  th:text="${session.nameTPerson?.personName}"></a>&nbsp;&nbsp;<a data-toggle="modal" data-target="#login" href="/logout"><span class="glyphicon glyphicon-log-in"></span>退出登陆</a></li>
                     </ul>
                 </div>
 
                 <script th:inline="javascript">
 
 
-                    var nameTPerson = [[${session.nameTPerson?.personNickname}]];
+                    var nameTPerson = [[${session.nameTPerson?.personName}]];
                     if (nameTPerson==null){
                         document.getElementById("beforeLanding").style.display="";
                     } else if (nameTPerson!=null){
@@ -150,7 +150,7 @@
     <!--导航栏模糊查询的函数-->
     <script>
         $("#searchinfo").click(function () {
-            var keyname= $("#personNickname").val();
+            var keyname= $("#personName").val();
             window.location.href = 'toSearch';
             sessionStorage.setItem("keyname",keyname);
         });

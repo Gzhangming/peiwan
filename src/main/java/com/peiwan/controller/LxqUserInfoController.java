@@ -334,8 +334,8 @@ public class LxqUserInfoController {
      */
     @RequestMapping("/checkoutPersonNick")
     @ResponseBody
-    public Map checkNickname(String personNickname) {
-        List list = lxqUserInfoMapper.getCheckoutPersonNickname(personNickname);
+    public Map checkNickname(String personName) {
+        List list = lxqUserInfoMapper.getCheckoutpersonName(personName);
         if (list.size() > 0) {
             Map map = new HashMap();
             map.put("result", 1);

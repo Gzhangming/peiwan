@@ -89,7 +89,7 @@
 
             <div class="seach_Box">
                 <img src="/images/ico_28_hover.png" style="display: none;">
-                <input id="personNickname" placeholder="陪玩昵称、ID、靓号" type="text" >
+                <input id="personName" placeholder="陪玩昵称、ID、靓号" type="text" >
                 <p @click="inputShow" id="searchinfo" class="seach_p"></p>
             </div>
 
@@ -110,7 +110,7 @@
     <!--导航栏模糊查询的函数-->
     <script>
         $("#searchinfo").click(function () {
-            var keyname= $("#personNickname").val();
+            var keyname= $("#personName").val();
             window.location.href = 'toSearch';
             sessionStorage.setItem("keyname",keyname);
         });
@@ -252,7 +252,7 @@
                 dataType: 'json',
                 url: '/person/searchPerson',
                 data: {
-                    personNickname:keyname
+                    personName:keyname
                 },
                 success: function (msg) {
                     search.result = msg.searchPersonList;

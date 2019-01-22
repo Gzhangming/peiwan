@@ -314,8 +314,8 @@
                     <div class="fl mt10 name_title">
                         <span class="star">*</span>昵称:
                     </div>
-                    <input class="fl name_text pl10" type="text" placeholder="昵称" value="" id="personNickname"
-                           name="personNickname">
+                    <input class="fl name_text pl10" type="text" placeholder="昵称" value="" id="personName"
+                           name="personName">
                     <div class="clearfix"></div>
                 </div>
                 <div class="mt30">
@@ -1506,7 +1506,7 @@
         $(".sure_box1").click(function () {
             var  flag=true;
             /*昵称判断*/
-            if($("#personNickname").val()==''){
+            if($("#personName").val()==''){
                 alert('昵称不能为空!');
                 flag=false;
             }
@@ -1576,7 +1576,7 @@
             }
         }
 
-        $("#personNickname").blur(function () {
+        $("#personName").blur(function () {
             var nickname = $(this).val();
             var len = nickname.length;
             if (len < 2 ) {
@@ -1592,7 +1592,7 @@
             $.ajax({
                 url: "/checkoutPersonNick",
                 data:{
-                    personNickname:$("#personNickname").val()
+                    personName:$("#personName").val()
                 },
                 type: "get",
                 dataType: "json",

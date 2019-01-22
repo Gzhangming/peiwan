@@ -43,14 +43,11 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        System.out.println("执行认证逻辑");
-
-
         //编写shiro判断逻辑 ，判断用户名和密码
         //1判断用户名
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         TPerson myTPersonname = zjmLoginService.myTPersonname(token.getUsername());
-        if(myTPersonname.getPersonNickname()!=null||myTPersonname.getPersonPwd()!=null){
+        if(myTPersonname.getPersonName()!=null||myTPersonname.getPersonPwd()!=null){
             // 获取用户名即可
             String personName = myTPersonname.getPersonName();
             String personPwd = myTPersonname.getPersonPwd();

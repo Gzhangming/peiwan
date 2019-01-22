@@ -5,7 +5,7 @@
     <!-- 通用查询映射结果 -->
    <!-- <resultMap id="BaseResultMap" type="com.peiwan.bean.PPerson">
         <id column="pid" property="pid" />
-        <result column="person_nickname" property="personNickname" />
+        <result column="person_nickname" property="personName" />
         <result column="person_name" property="personName" />
         <result column="person_pwd" property="personPwd" />
         <result column="person_tel" property="personTel" />
@@ -43,8 +43,8 @@
             <if test="pid != null and pid != ''">
                 AND p.pid=#{pid}
             </if>
-            <if test="personNickname != null and personNickname != ''">
-                AND p.person_nickname like "%"#{personNickname}"%"
+            <if test="personName != null and personName != ''">
+                AND p.person_nickname like "%"#{personName}"%"
             </if>
     </select>
 

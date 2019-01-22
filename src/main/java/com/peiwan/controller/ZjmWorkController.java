@@ -40,11 +40,13 @@ public class ZjmWorkController {
     //异步验证用户名是否存在  0 可以用 否则不可用
     @RequestMapping("/registerName")
     @ResponseBody
-    public Map registerName(String personNickname){
+    public Map registerName(String personName){
         Map map = new HashMap();
-        Integer integer = zjmLoginService.checkRegisterName(personNickname);
-        //返回的是查询的个数  0  表示用户名不存在 可用  1 表示用户名存在
-        map.put("nameState",integer);
+        if(personName!=null){
+            Integer integer = zjmLoginService.checkRegisterName(personName);
+            //返回的是查询的个数  0  表示用户名不存在 可用  1 表示用户名存在
+            map.put("nameState",integer);
+        }
         return map;
     }
 
@@ -54,8 +56,9 @@ public class ZjmWorkController {
     @RequestMapping("/registers")
     public String registers(TPerson TPerson){
 
-        if (TPerson.getPersonNickname()!=null||TPerson.getPersonPwd()!=null||TPerson.getPersonTel()!=null){
+        if (TPerson.getPersonName()!=null||TPerson.getPersonPwd()!=null||TPerson.getPersonTel()!=null){
             boolean result= zjmLoginService.registerData(TPerson);
+
             if (result){
                 return "login";
             }else {
@@ -73,7 +76,7 @@ public class ZjmWorkController {
     public Map  sendCode(String personTel){
         Map map = new HashMap();
         if(!PhoneFormatCheckUtils.isChinaPhoneLegal(personTel)){
-            map.put("msg","手机格式不正确！");
+            map.put("msg",false);
             return map;
         }
         try {
@@ -110,14 +113,17 @@ public class ZjmWorkController {
      */
     @RequestMapping("/Yname")
     @ResponseBody
-    public Map Yname(String personNickname){
-
-        //存放返回的数据
+    public Map Yname(String personName){
+        //0 用户账户一定不争取   1 可以放行 去进行密码验证  -1 出现异常输入
         Map map=new HashMap();
-        //
-        String iTPersonname = zjmLoginService.iTPersonname(personNickname);
-        map.put("iTPersonname",iTPersonname);
-        return map;
+        if(personName==null||personName==""){
+            map.put("iTPersonname",-1);
+            return map;
+        }else{
+            Integer iTPersonname = zjmLoginService.iTPersonname(personName);
+            map.put("iTPersonname",iTPersonname);
+            return map;
+        }
 
     }
 
@@ -130,16 +136,16 @@ public class ZjmWorkController {
 
     @RequestMapping("/Ypwd")
     @ResponseBody
-    public Map Ypwd(String personNickname,String personPwd){
+    public Map Ypwd(String personName,String personPwd){
         //存放返回的数据
         Map map=new HashMap();
-        //
-        if (personPwd!=null){
-            String iTPersonpwd = zjmLoginService.iTPersonpwd(personNickname, personPwd);
-            System.out.println(iTPersonpwd);
+        // 0  密码和用户不正确  1 可以登陆  -1 输入异常
+        if (personPwd!=null||personName!=null){
+            Integer iTPersonpwd = zjmLoginService.iTPersonpwd(personName, personPwd);
             map.put("iTPersonpwd",iTPersonpwd);
             return map;
         }
+        map.put("iTPersonpwd",-1);
         return map;
 
     }
@@ -158,46 +164,35 @@ public class ZjmWorkController {
          */
         //1.获取Subject
         Subject subject = SecurityUtils.getSubject();
-        String personNickname = TPerson.getPersonNickname();
+        String personName = TPerson.getPersonName();
         String personPwd = TPerson.getPersonPwd();
         //2.封装用户数据
-        UsernamePasswordToken token = new UsernamePasswordToken(personNickname,personPwd);
-        //3.执行登录方法
-        try {
-            //没有异常登录成功
-            subject.login(token);
-
-
-            //判断当前用户是否登陆
-            if(subject.isAuthenticated()==true){
-//                System.out.println("测试555555555555");
-//                System.out.println("zhang"+personNickname);
-//                System.out.println("mi"+personPwd);
-                TPerson.setPersonNickname(personNickname);
-                TPerson.setPersonPwd(personPwd);
-                TPerson nameTPerson = zjmLoginService.nameTPerson(TPerson);
-                Session session = subject.getSession();
-                session.setAttribute("nameTPerson",nameTPerson);
-                return "index";//待修改
-            }
-//                    TPerson nameTPerson = zjmLoginService.nameTPerson(TPerson);
-//                    session.setAttribute("nameTPerson",nameTPerson);
-//                    return "redirect:/toIndex";
-
-        }catch (UnknownAccountException e){
-            //出现异常登录失败
-//            e.printStackTrace();
-            model.addAttribute("msg","用户名不存在");
-            System.out.println("111111111");
-            return "login";
-
-        }catch (IncorrectCredentialsException e){
-            model.addAttribute("msg","密码错误");
-            System.out.println("111111112");
-            return "redirect:/toLogin";
-        }
-        System.out.println("1111111113");
-        return "login";
+        UsernamePasswordToken token = new UsernamePasswordToken(personName,personPwd);
+       if (personName!=null||personPwd!=null){
+           //3.执行登录方法
+           try {
+               //没有异常登录成功
+               subject.login(token);
+               //判断当前用户是否登陆
+               if(subject.isAuthenticated()==true){
+                   TPerson.setPersonName(personName);
+                   TPerson.setPersonPwd(personPwd);
+                   TPerson nameTPerson = zjmLoginService.nameTPerson(TPerson);
+                   Session session = subject.getSession();
+                   session.setAttribute("nameTPerson",nameTPerson);
+                   return "redirect:/MyIndex";//待修改
+               }
+           }catch (UnknownAccountException e){
+               //用户名错误
+               return "redirect:/toLogin";
+           }catch (IncorrectCredentialsException e){
+               //密码错误
+               return "redirect:/toLogin";
+           }
+           return "redirect:/toLogin";
+       }else {
+           return "redirect:/toLogin";
+       }
     }
 
 

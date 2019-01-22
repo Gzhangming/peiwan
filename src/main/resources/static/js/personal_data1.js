@@ -472,8 +472,8 @@ function subform() {
         flag = false;
         return false;
     }
-    if ($('#personNickname').val().trim().length == 0 || $('#personNickname').val().trim().length > 20) {
-        $('#personNickname').addClass('add_input');
+    if ($('#personName').val().trim().length == 0 || $('#personName').val().trim().length > 20) {
+        $('#personName').addClass('add_input');
         alert('请填写昵称');
         flag = false;
     }

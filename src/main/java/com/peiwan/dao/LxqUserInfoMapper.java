@@ -33,7 +33,7 @@ public interface LxqUserInfoMapper extends BaseMapper<TAttention>{
      */
 
     @Update("update t_person set " +
-            "person_name=#{personNickname},person_sex=#{personSex}," +
+            "person_name=#{personName},person_sex=#{personSex}," +
             "person_birthday=#{personBirthday},person_qq=#{personQq}," +
             "person_adress=#{personAdress},person_content=#{personContent}," +
             "person_height=#{personHeight},person_weight=#{personWeight}," +
@@ -45,12 +45,12 @@ public interface LxqUserInfoMapper extends BaseMapper<TAttention>{
     /**
      * 判断昵称是否存在
      * lxq
-     * @param personNickname
+     * @param personName
      * @return
      */
 
-    @Select("select * from t_person where person_nickname=#{personNickname}")
-    List<TPerson> getCheckoutPersonNickname(String personNickname);
+    @Select("select * from t_person where person_nickname=#{personName}")
+    List<TPerson> getCheckoutpersonName(String personName);
 
     /**
      * 才艺表插入
@@ -119,7 +119,7 @@ public interface LxqUserInfoMapper extends BaseMapper<TAttention>{
      * 用户信息修改
      * @author lxq
      */
-    @Update("update t_person set person_nickname=#{personNickname},person_qq=#{personQq} where pid=#{pid}")
+    @Update("update t_person set person_nickname=#{personName},person_qq=#{personQq} where pid=#{pid}")
     int getUpdateUserInfo(TPerson pPerson);
     /**
      * 用户密码检查

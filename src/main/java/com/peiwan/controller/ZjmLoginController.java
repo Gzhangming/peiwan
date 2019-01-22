@@ -59,6 +59,12 @@ public class ZjmLoginController {
     public ModelAndView toregister(){
         return  new ModelAndView("register");
     }
+//  404
+    @RequestMapping("/to404")
+    public ModelAndView to404(){
+
+        return new ModelAndView("error");
+}
 
 /*
 //  链接数据库进行登陆业务(逻辑  根据用户名和密码查询数据的所有信息  两个都正确跳到首页 并且把用户名传到首页)

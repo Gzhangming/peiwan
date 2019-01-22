@@ -50,9 +50,9 @@ public class ZYFController {
 
     //根据昵称和Id模糊查询主播
     @RequestMapping("/searchPerson")
-    public Map<String,Object> searchPerson(String personNickname,Integer pid){
+    public Map<String,Object> searchPerson(String personName,Integer pid){
         TPerson person = new TPerson();
-        person.setPersonNickname(personNickname);
+        person.setPersonName(personName);
         person.setPid(pid);
         List<Map<String, Object>> searchPersonList = zyfService.selectPersonByNameId(person);
         Map map = new HashMap();

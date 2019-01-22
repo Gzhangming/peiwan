@@ -17,13 +17,13 @@ public interface ZjmLoginService extends IService<TPerson> {
     //   测试
     TPerson nameTPerson(TPerson TPerson);
     List<TPerson> addTPerson(int id);
-    TPerson myTPersonname(String personNickname);
+    TPerson myTPersonname(String personName);
 
-    String iTPersonname(String personNickname);
+    Integer iTPersonname(String personName);
 
-    String iTPersonpwd(String personNickname,String personPwd);
+    Integer iTPersonpwd(String personName,String personPwd);
 
-    Integer checkRegisterName(String personNickname);
+    Integer checkRegisterName(String personName);
 
     /**
      * 注册功能
